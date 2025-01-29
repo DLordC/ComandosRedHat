@@ -1,0 +1,75 @@
+Practica 1
+(No se utilizaron comandos debido a que esta fue la instalacion y no se utilizo ningun comando).
+
+Practica 2
+  sudo nano /etc/sysconfig/network-scripts/ifcfg-eth0
+  nmtui
+  sudo systemctl restart network-online.target
+
+Practica 3
+  sudo useradd LawrenceOrtiz
+  cat /etc/passwd
+  sudo usermod -ag sudoers LawrenceOrtiz
+  sudo groupadd sudoers
+  cat /etc/group
+  sudo usermod -ag sudoers LawrenceOrtiz
+  sudo usermod -aG sudoers LawrenceOrtiz
+  cat /etc/passwd
+  groups LawrenceOrtiz 
+  sudo groupadd guest
+  sudo useradd guestuser
+  sudo usermod -aG guest guestuser
+  groups guestuser 
+  cat /etc/passwd
+  sudo userdel guestuser 
+  cat /etc/passwd
+  sudo groupdel guest
+  cat /etc/group
+
+Practica 4
+  ls
+  mkdir materia
+  ls
+  cd materia
+  touch estudiante.txt
+  ls
+  vim estudiante.txt
+  cat estudiante.txt 
+  cd -
+  cd materia
+  group lortiz
+  groups lortiz
+  ls -l
+  ls -l estudiante.txt 
+  chmod u+x estudiante.txt 
+  ls -l estudiante.txt 
+  chmod g+w estudiante.txt 
+  chmod g+x estudiante.txt 
+  ls -l estudiante.txt 
+  chmod o-r estudiante.txt 
+  ls -l estudiante.txt 
+  cd -
+  mkdir materia2
+  ls
+  pwd
+  cd materia
+  cp estudiante.txt /home/lortiz/materia2
+  cd -
+  ls
+  cd materia2
+  ls
+  cat estudiante.txt
+  cd -
+  cd materia
+  ls
+  cat estudiante.txt
+  cd -
+  rm materia
+  rmdir materia
+  rm -r materia
+  ls
+  cd materia2
+  ls
+  cd -
+  rm -r materia2
+  ls
