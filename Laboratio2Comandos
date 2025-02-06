@@ -1,0 +1,36 @@
+Practica 1
+
+sudo dnf upgrade
+sudo dnf update
+sudo yum --cacheonly list available 
+sudo dnf --cacheonly search bashtop
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+sudo dnf install snapd
+sudo snap install bashtop
+sudo dnf upgrade
+sudo systemctl enable --now snapd.socket
+sudo snap install bashtop
+bashtop
+bashtop 
+sudo snap remove bashtop 
+ls
+ls snap
+cd snap
+ls
+cd
+sudo dnf autoremove
+sudo dnf repolist 
+sudo snap repolist
+sudo snap help
+sudo snap list
+
+Practica 2
+
+crontab -e
+sudo visudo
+ls /tmp/
+at 05:33
+at now 1
+at now + 1 minutes
+s /tmp/
+rm -rf /tmp/*
