@@ -1,0 +1,63 @@
+Practica 1
+
+sudo nano /etc/default/grub
+sudo update-grub
+sudo nano /etc/default/grub
+
+Practica 2
+
+touch script1.sh
+nano script1.sh
+chmod +x script1.sh 
+./script1.sh 
+nano script1.sh
+./script1.sh 
+nano script1.sh
+./script1.sh 
+nano script1.sh
+./script1.sh 
+clear
+nano script1.sh
+./script1.sh
+cd /home/lortiz/Desktop
+ls
+cat resultado
+clear
+cd
+touch script2.sh
+nano script2.sh 
+chmod +x script2.sh 
+./script2.sh
+nano script2.sh 
+./script2.sh
+ls
+nano nombre
+clear
+nano script2.sh 
+./script2.sh
+ls
+
+Practica 3
+
+sudo systemctl start sshd
+sudo systemctl enable sshd
+sudo yum install -y openssh-server
+sudo systemctl start sshd
+sudo systemctl enable sshd
+sudo firewall-cmd --permanent --add-service=ssh
+sudo firewall-cmd --reload
+sudo nano /etc/ssh/sshd_config
+cd /home/lortiz/.ssh
+cd ~/.ssh
+mkdir -p ~/.ssh
+cd ~/.ssh
+touch authorized_keys
+nano authorized_keys
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+ls -l
+ls -l ~/.ssh
+cd
+ls -l ~/.ssh
+sudo systemctl restart sshd
+sudo nano /etc/ssh/sshd_config
