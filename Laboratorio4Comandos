@@ -1,0 +1,49 @@
+Practica 1
+
+sudo yum install httpd
+sudo mkdir -p /var/www/html/holamundo
+sudo nano /var/www/html/holamundo/index.html
+sudo nano /etc/httpd/conf.d/holamundo.conf
+sudo firewall-cmd --zone=public --add-port=80/tcp --permanent 
+sudo firewall-cmd --reload 
+sudo systemctl start httpd
+sudo systemctl enable httpd
+sudo systemctl restart httpd
+sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
+sudo nano /etc/httpd/conf.d/holamundo.conf
+sudo chown -R apache:apache /var/www/html/holamundo/
+sudo systemctl restart httpd
+sudo nano /var/www/html/holamundo/index.html
+sudo systemctl restart httpd
+sudo mkdir -p /var/www/html/matricula
+sudo nano /var/www/html/matricula/index.html
+sudo nano /etc/httpd/conf.d/matricula.conf
+sudo systemctl restart httpd
+
+Practica 2
+
+sudo dnf install postfix cyrus-sasl cyrus-sasl-plain
+cd /etc/postfix/
+sudo systemctl enable postfix
+sudo systemctl start postfix
+sudo systemctl status postfix
+sudo nano sasl_passwd
+sudo nano /etc/postfix/main.cf
+sudo yum install s-nail
+echo "Nombre: Lawrence Ortiz Matricula: 20230767" | mail -s "MambruSeFueALaGuerra" lawrence1a@hotmail.com
+sudo systemctl restart postfix
+echo "Nombre: Lawrence Ortiz Matricula: 20230767" | mail -s "MambruSeFueALaGuerra" lawrence1a@hotmail.com
+echo "Nombre: Lawrence Ortiz Matricula: 20230767" | s-nail -s "MambruSeFueALaGuerra" lawrence1a@hotmail.com
+sudo tail -f /var/log/maillog
+cd
+sudo nano /etc/postfix/sasl_passwd
+sudo postmap /etc/postfix/sasl_passwd
+sudo chmod 600 /etc/postfix/sasl_passwd
+sudo systemctl restart postfix
+echo "Nombre: Lawrence Ortiz Matricula: 20230767" | s-nail -s "MambruSeFueALaGuerra" lawrence1a@hotmail.com
+sudo tail -f /var/log/maillog
+echo "Nombre: Lawrence Ortiz Matricula: 20230767" | s-nail -s "MambruSeFueALaGuerra" os3conadrian@gmail.com
+sudo tail -f /var/log/maillog
+
+Practica 3
+
