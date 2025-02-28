@@ -47,3 +47,20 @@ sudo tail -f /var/log/maillog
 
 Practica 3
 
+sudo yum install cups
+sudo dnf install cups-pdf
+sudo nano /etc/cups/cupsd.conf
+sudo firewall-cmd --permanent --add-port=631/tcp
+sudo firewall-cmd --reload 
+sudo systemctl enable --now cups
+sudo systemctl start cups
+sudo systemctl enable cups
+sudo dnf install cups-pdf
+ip addr show
+cupsctl 
+cupsctl --share-printers
+cupsctl --share-printers --remote-any
+sudo nano /etc/cups/cupsd.conf
+sudo systemctl restart cups
+cupsctl --remote-admin --remote-any --share-printers
+sudo firewall-cmd --permanent --add-port=631/tcp
