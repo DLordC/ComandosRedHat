@@ -1,3 +1,5 @@
+Practica 1
+
 mkdir /home/lortiz/rtest
 ls
 rm script1.sh 
@@ -19,3 +21,48 @@ chmod +x /home/lortiz/rsync_sync.sh
 crontab -e
 touch /home/lortiz/rtest/mamatingo.txt
 ls /home/lortiz/rtest/
+
+Practica 2
+
+sudo systemctl enable pcsd
+sudo systemctl 
+sudo systemctl start pcsd
+clear
+sudo passwd hacluster
+sudo pcs host auth 10.0.0.70 10.0.0.87
+sudo pcs cluster setup practica 10.0.0.70 10.0.0.87
+sudo pcs cluster setup practica --force 10.0.0.70 10.0.0.87
+sudo pcs cluster start -all
+sudo pcs cluster start --all
+sudo pcs cluster enable -all
+sudo pcs cluster enable --all
+sudo nano /etc/corosync/corosync.conf
+sudo pcs status
+ping 10.0.0.87
+sudo pcs resource create VIP ocf:heartbeat:IPaddr2 ip=10.0.0.100 cidr_netmask=24 op monitor interval=30s
+sudo pcs status
+ping 10.0.0.100
+sudo pcs property set stonith-enabled=false
+sudo pcs status
+ping 10.0.0.100
+sudo pcs status
+sudo pcs property set stonith-enabled=false
+sudo pcs status
+sudo systemctl pcsd enable
+sudo systemctl enable pcsd
+sudo systemctl start pcsd
+sudo pcs status
+sudo pcs resource show 10.0.0.100
+sudo pcs resource config 10.0.0.100
+sudo pcs resource config VIP
+sudo pcs quorum status
+sudo systemctl restart corosync pacemaker
+sudo pcs quorum status
+sudo pcs status
+sudo pcs property set stonith-enabled=false
+sudo pcs status
+sudo pcs resource enable VIP
+sudo pcs status
+sudo pcs property set no-quorum-policy=ignore
+sudo pcs status
+ping 10.0.0.100
