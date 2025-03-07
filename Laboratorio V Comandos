@@ -1,0 +1,21 @@
+mkdir /home/lortiz/rtest
+ls
+rm script1.sh 
+rm script2.sh 
+rm nombre
+clear
+cd /home/lortiz/rtest/
+touch test{1..100}.txt
+ls
+sudo yum install rsync
+rsync -avz /home/lortiz/rtest/ lortiz@10.0.0.87:/home/lortiz
+rsync -avz /home/lortiz/rtest/ lortiz@10.0.0.87:/home/lortiz/rtest/
+ssh-keygen -t rsa
+ssh-copy-id lortiz@10.0.0.87
+cd
+nano /home/lortiz/rsync_sync.sh
+ls
+chmod +x /home/lortiz/rsync_sync.sh
+crontab -e
+touch /home/lortiz/rtest/mamatingo.txt
+ls /home/lortiz/rtest/
