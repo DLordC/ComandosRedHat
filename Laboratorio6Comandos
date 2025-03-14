@@ -1,0 +1,63 @@
+Practica 1
+
+sudo dnf install gnupg2
+ls
+cd ~/gpg_test/
+sudo touch testgpg.txt
+sudo nano testgpg.txt 
+sudo gpg2 -c testgpg.txt
+ls
+sudo rm archivo.txt archivo.txt.gpg  testgpg.txt
+ls
+cat testgpg.txt.gpg 
+sudo gpg2 -d testgpg.txt.gpg | sudo tee testdes.txt
+sudo gpg2 -d testgpg.txt.gpg > dsafasd.txt
+ls
+cat testdes.txt 
+cat testgpg.txt.gpg 
+
+Practica 2
+
+sudo dnf install httpd vsftpd openssh-server
+sudo systemctl enable --now httpd vsftpd sshd
+systemctl status httpd vsftpd sshd
+sudo iptables -A INPUT -p tcp --dport 80 -j DROP
+sudo iptables -A INPUT -p tcp --dport 21 -j DROP
+sudo iptables -A INPUT -p tcp --dport 22 -j DROP
+sudo iptables -L -v
+sudo iptables -D INPUT -p tcp --dport 80 -j DROP
+sudo iptables -D INPUT -p tcp --dport 21 -j DROP
+sudo iptables -D INPUT -p tcp --dport 22 -j DROP
+sudo iptables -L -v
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port port="80" protocol="tcp" reject'
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port port="21" protocol="tcp" reject'
+sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port port="22" protocol="tcp" reject'
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-all
+sudo firewall-cmd --permanent --remove-rich-rule='rule family="ipv4" port port="80" protocol="tcp" reject'
+sudo firewall-cmd --permanent --remove-rich-rule='rule family="ipv4" port port="21" protocol="tcp" reject'
+sudo firewall-cmd --permanent --remove-rich-rule='rule family="ipv4" port port="22" protocol="tcp" reject'
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-all
+sudo firewall-cmd --zone-list
+sudo firewall-cmd --get-active-zones
+sudo firewall-cmd --zone=public --permanent --add-rich-rule='rule family="ipv4" port port="80" protocol="tcp" reject'
+sudo firewall-cmd --zone=public --permanent --add-rich-rule='rule family="ipv4" port port="21" protocol="tcp" reject'
+sudo firewall-cmd --zone=public --permanent --add-rich-rule='rule family="ipv4" port port="22" protocol="tcp" reject'
+sudo firewall-cmd --reload
+sudo firewall-cmd --zone=public --list-all
+sudo firewall-cmd --zone=public --permanent --remove-rich-rule='rule family="ipv4" port port="80" protocol="tcp" reject'
+sudo firewall-cmd --zone=public --permanent --remove-rich-rule='rule family="ipv4" port port="21" protocol="tcp" reject'
+sudo firewall-cmd --zone=public --permanent --remove-rich-rule='rule family="ipv4" port port="22" protocol="tcp" reject'
+
+Practica 3
+
+sudo nano /usr/local/snort/etc/snort/snort.lua
+snort -T -c /usr/local/snort/etc/snort/snort.lua
+snort --daq-dir=/usr/local/lib/daq -T -c /usr/local/snort/etc/snort/snort.lua
+sudo ip link set dev ens160 promisc on
+sudo nano /usr/local/snort/etc/snort/local.rules
+sudo snort -c /usr/local/snort/etc/snort/snort.lua -R /usr/local/snort/etc/snort/local.rules -i ens160 -A alert_fast -s 65535 -k none
+sudo snort --daq-dir=/usr/local/lib/daq -c /usr/local/snort/etc/snort/snort.lua -R /usr/local/snort/etc/snort/local.rules -i ens160 -A alert_fast -s 65535 -k none
+sudo nano /usr/local/snort/etc/snort/local.rules
+sudo nano /usr/local/snort/etc/snort/local.rules
