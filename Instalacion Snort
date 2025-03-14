@@ -1,0 +1,35 @@
+***Sigue estos pasos en orden! Los comandos que empiezan con . necesitan de librerias para ser ejecutados. Recomiendo ejecutar todos los comandos con sudo a menos de que no sea posible, si al utilizar sudo, recibes un mensaje de que el comando no existe, ejecuta el comando sin sudo***
+
+sudo dnf update && sudo yum update
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+sudo subscription-manager repos --enable codeready-builder-for-rhel-8-x86_64-rpms
+sudo yum upgrade -y
+sudo nano /etc/ld.so.conf.d/local.conf  
+      /usr/local/lib 
+      /usr/local/lib64 
+
+sudo dnf install flex bison gcc gcc-c++ make cmake autoconf libtool git nano unzip wget libpcap-devel pcre-devel libdnet-devel hwloc-devel openssl-devel zlib-devel luajit-devel pkgconfig pkgconf libunwind-devel libnfnetlink-devel libnetfilter_queue-devel libmnl-devel xz-devel gperftools libuuid-devel hyperscan hyperscan-devel  -y
+
+git clone https://github.com/snort3/libdaq.git 
+cd libdaq/ 
+./bootstrap 
+./configure && make && sudo make install 
+sudo ldconfig 
+cd ../ 
+
+git clone https://github.com/snort3/snort3.git 
+cd snort3 
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH 
+export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:$PKG_CONFIG_PATH 
+export CFLAGS="-O3" 
+export CXXFLAGS="-O3 -fno-rtti" 
+./configure_cmake.sh --prefix=/usr/local/snort --enable-tcmalloc 
+
+cd build/ 
+make -j$(nproc) 
+sudo make -j$(nproc) install 
+cd ../../ 
+sudo ldconfig 
+/usr/local/snort/bin/snort
+sudo ln -s /usr/local/snort/bin/snort /usr/bin/snort
+snort -V
