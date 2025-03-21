@@ -1,0 +1,70 @@
+Practica 1
+
+    4  sudo dnf install nfs-utils -y
+    5  clear'
+    6  clear
+    7  sudo systemctl enable --now nfs-server rpcbind
+    8  sudo systemctl start nfs-server
+    9  sudo mkdir -p /srv/OS3
+   10  cd /srv/OS3
+   11  sudo touch Adrian_{1..100}.txt
+   12  ls
+   13  sudo chmod 755 /srv/OS3
+   14  sudo chown nobody:nobody /srv/OS3
+   15  sudo nano /etc/exports
+   16  echo "/srv/OS3 *(rw,sync,no_root_squash_no_subtree_check)" | sudo tee -a /etc/exports
+   17  sudo nano /etc/exports
+   18  sudo exportfs -rav
+   19  sudo nano /etc/exports
+   20  sudo exportfs -rav
+   21  sudo exportfs -v
+   22  sudo mkdir -p /mnt/nfs_OS3
+   23  ip a
+   24  sudo mount 10.0.0.87:/srv/OS3 /mnt/nfs_OS3
+   25  ls /mnt/nfs_OS3
+   26  echo "10.0.0.87:/srv/OS3 /mnt/nfs_OS3 nfs defaults 0 0" | sudo tee -a /etc/fstab
+   27  sudo nano /etc/fstab
+   28  ls /mnt/nfs_OS3
+   29  sudo reboot
+   30  ls /mnt/OS3
+   31  ls /mnt
+   32  ls /mnt/nfs_OS3
+
+Practica 2
+
+    4  sudo dnf install samba samba-client -y
+    5  clear
+    6  sudo systemctl enable smb nmb 
+    7  sudo systemctl start smb nmb 
+    8  sudo systemctl status smb nmb 
+    9  mkdir ~/samba/shared
+   10  mkdir ~/samba/
+   11  mkdir ~/samba/shared
+   12  groupadd sambagrp
+   13  sudo groupadd sambagrp
+   14  sudo usermod -aG sambagrp lawortiz 
+   15  sudo smbpasswd -a lawortiz
+   16  sudo chown -R root:sambagrp ~/samba/shared
+   17  sudo chmod g+rw -R ~/samba/shared
+   18  sudo chmod 777 -R ~/samba/shared
+   19  sudo nano /etc/samba/smb.conf
+   20  sudo systemctl smb nmb
+   21  sudo systemctl restart smb nmb
+   22  sudo touch ~/samba/shared/adrian_{1..100}.txt
+   23  ls ~/samba/shared
+   24  sudo firewall-cmd --add-service=samba --permanent
+   25  sudo firewall-cmd --reload
+   26  sudo setenforce 0
+   27  sudo setsebool -p samba_enable_home_dirs on
+   28  sudo setsebool -P samba_enable_home_dirs on
+   29  sudo setsebool -P samba_export_all_rw on
+   30  sudo setenforce 1
+   31  ls -ld ~/samba/shared
+   32  ls -l ~/samba/shared
+   33  sudo g+rw -R ~/samba/shared
+   34  sudo chmod g+rw -R ~/samba/shared
+   35  ls -l ~/samba/shared
+   36  sudo nano /etc/samba/smb.conf
+   37  sudo chown -R :sambagrp ~/samba/shared
+   38  ls -l ~/samba/shared
+   39  cat ~/samba/shared/adrian_99.txt
