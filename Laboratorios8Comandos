@@ -1,0 +1,38 @@
+Practica 1 
+
+     sudo dnf update -y
+     clear
+     sudo dnf install -y dnf-utils
+     sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+     sudo dnf install -y docker-ce docker-ce-cli containerd.io
+     docker --version
+     sudo systemctl start docker
+     sudo systemctl enable docker
+     clear
+     sudo docker pull nginx
+     clear
+     sudo mkdir -p /home/website
+     sudo docker run -d -p 8888:80 -v /home/website:/usr/share/nginx/html nginx
+     cd /home/website
+     sudo nano index.html
+     cd
+
+Practica 2 
+
+     sudo docker pull portainer/portainer-ce
+     sudo docker ps
+     clear
+     sudo docker run -d -p 9000:9000 -p 8000:8000 --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+     clear
+     sudo docker ps
+
+Practica 3 
+
+     sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+     sudo chmod +x /usr/local/bin/docker-compose
+     docker-compose --version
+     sudo nano docker-compose.yml
+     sudo docker compose up -d
+     sudo nano docker-compose.yml
+     sudo docker compose up -d
+     sudo docker ps
