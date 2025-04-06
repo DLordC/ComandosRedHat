@@ -1,0 +1,87 @@
+# Practica 1 
+
+# Practica 2
+
+sudo dnf install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+sudo dnf install -y terraform
+ssh-keygen -t rsa -b 4096
+cat ~/.ssh/id_rsa.pub
+mkdir terraform
+cd ~/terraform
+sudo nano main.tf
+terraform init
+terraform plan
+terraform apply
+sh root@165.227.204.206
+ssh root@165.227.204.206
+ip a
+
+# Practica 3
+
+- Comandos VM Red Hat
+
+sudo dnf update -y
+sudo subscription-manager repos --enable codeready-builder-for-rhel-9-$(arch)-rpms
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+sudo dnf install ansible -y
+ansible --version
+sudo dnf install python3 python3-pip -y
+sudo pip3 install pywinrm
+ssh-keygen -t rsa
+sudo mkdir /home/ansible
+sudo mkdir /home/ansible/.ssh
+ssh-keygen -t rsa
+sudo ssh-keygen -t rsa
+ssh-copy-id ansible@165.227.204.206
+sudo ssh-copy-id ansible@165.227.204.206
+ssh-copy-id ansible@165.227.204.206
+cat ~/.ssh/id_rsa.pub
+ssh-copy-id ansible@165.227.204.206
+sudo nano /etc/ansible/hosts
+ansible win -m win_ping
+ansible linux -m ping
+
+- Comandos VM DigitalOcean
+
+sudo apt install python3 python3-pip -y
+sudo pip3 install pywinrm
+sudo adduser ansible
+sudo usermod -aG sudo ansible
+groups
+group
+ssh-keygen -t rsa 
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+sudo nano /home/ansible/.ssh/authorized_keys
+mkdir /home/ansible
+4
+sudo nano /home/ansible/.ssh/authorized_keys
+
+# Practica 4
+
+- Comandos VM Red Hat
+
+ansible ansible2 -m win_copy -a 'src=C:/Users/ansible/Desktop/archivo.txt dest=C:/Users/ansible/Documents/archivo.txt remote_src=yes'
+ansible ansible2 -m win_copy -a 'src=C:/Users/ansible/Desktop dest=C:/Users/ansible/Documents/archivo.txt remote_src=yes'
+ansible ansible2 -m win_copy -a 'src=C:/Users/ansible/Desktop/archivo.txt.txt dest=C:/Users/ansible/Documents/archivo.txt remote_src=yes'
+ansible ansible1 -m reboot
+sudo nano /etc/ansible/hosts
+ansible ansible1 -m reboot
+
+- Comandos VM DigitalOcean
+
+groups ansible
+groups root
+sudo usermod -aG root ansible
+groups root
+groups ansible
+
+# Practica 5
+
+mkdir -p ~/ansible/playbooks
+cd ~/ansible/playbooks
+nano instalarnote.yaml
+sudo nano inventory
+ansible-playbook -i inventory instalar_notepad++.yaml
+ansible-playbook -i inventory actualizar_repositorios.yaml
