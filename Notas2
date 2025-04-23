@@ -1,0 +1,285 @@
+### Webmin
+
+- wget http://www.webmin.com/download/rpm/webmin-current.rpm
+- sudo dnf install perl net-tools -y
+- sudo rpm -U webmin-current.rpm
+
+Usa https://<IP>:10000
+
+### Terraform
+
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+sudo yum -y install terraform
+terraform -version
+
+# Configurar SSH
+
+ssh-keygen -t rsa -b 4096
+cat ~/.ssh/id_rsa.pub
+
+Agregar esa llave SSH a DigitalOcean
+
+# Archivo main.tf
+
+mkdir terraform
+cd ~/terraform
+sudo nano main.tf
+
+Contenido:
+
+terraform {
+  required_providers {
+    digitalocean = {
+      source = "digitalocean/digitalocean"
+      version = ">= 1.0.0"
+    }
+  }
+}
+provider "digitalocean" {
+  token = "TU_API_TOKEN_DE_DIGITALOCEAN"
+}
+
+resource "digitalocean_droplet" "os3vm" {
+  image     = "ubuntu-22-04-x64"
+  name      = "OS3vm"
+  region    = "nyc1"
+  size      = "s-1vcpu-1gb"
+  ssh_keys  = ["7f:36:50:62:00:16:25:a9:f4:47:a4:7b:48:e4:b8:8b"]
+}
+
+# Iniciar Terraform
+
+terraform init
+terraform plan
+terraform apply
+terraform show
+
+# Acceder mediante SSH y el portal de DigitalOcean
+
+ssh root@<IP_PUBLICA>
+
+# Archivo main.tf Rocky Linux
+
+mkdir terraform
+cd ~/terraform
+sudo nano main.tf
+
+Contenido:
+
+terraform {
+  required_providers {
+    digitalocean = {
+      source = "digitalocean/digitalocean"
+      version = ">= 1.0.0"
+    }
+  }
+}
+provider "digitalocean" {
+  token = "TU_API_TOKEN_DE_DIGITALOCEAN"
+}
+
+resource "digitalocean_droplet" "rocky_linux" {
+  image     = "rockylinux-9-x64"
+  name      = "rocky-linux"
+  region    = "nyc1"
+  size      = "s-1vcpu-1gb"
+  ssh_keys  = [""]
+
+### Ansible
+
+# Instalar Ansible
+
+sudo dnf update -y
+sudo subscription-manager repos --enable codeready-builder-for-rhel-9-$(arch)-rpms
+
+sudo dnf install \
+https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+
+sudo dnf install ansible -y
+ansible --versión
+
+# Instalar python3 (DigitalOcean)
+
+sudo dnf install python3 python3-pip -y
+
+# Configurar WinRM
+
+En Powershell como administrador:
+
+Enable-PSRemoting -Force
+Set-Item WSMan:\localhost\Service\Auth\Basic -Value $true
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value "*"
+Set-Item WSMan:\localhost\Service\Auth\CredSSP -Value $false
+Restart-Service WinRM
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value *
+
+### Antes de seguir, hacer esto en Linux:
+
+ssh-keygen -t rsa (Guardaremos esto en /home/ansible/.ssh/id_rsa)
+ssh-copy-id ansible@<IP_DigitalO>
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+sudo nano /home/ansible/.ssh/authorized_keys (VM de DigitalO)
+sudo chmod 600 /home/ansible/.ssh/authorized_keys
+sudo chown -R ansible:ansible /home/ansible/.ssh
+sudo nano /etc/ssh/sshd_config
+
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+
+sudo systemctl restart sshd
+
+### Hacer esto en Windows:
+
+New-SelfSignedCertificate -CertStoreLocation Cert:\LocalMachine\My -DnsName "localhost"
+Get-ChildItem -Path Cert:\LocalMachine\My
+New-Item -Path WSMan:\Localhost\Listener -Transport HTTPS -Address * -CertificateThumbprint <CertThumbprint> -Port 5986
+netsh advfirewall firewall add rule name="WinRM HTTPS" dir=in action=allow protocol=TCP localport=5986
+winrm enumerate winrm/config/listener
+
+# Instalar modulo pywinrm (DigitalOcean)
+
+sudo pip3 install pywinrm
+
+# Crear el usuario ansible con permisos en la VM de DigitalOcean
+
+sudo adduser ansible
+sudo passwd ansible
+sudo addgroup wheel
+sudo usermod -aG wheel ansible
+
+# Crear el usuario Ansible en Windows
+
+# Configurar SSH para autenticacion sin contrasena (DigitalOcean)
+
+ssh-keygen -t rsa
+ssh-copy-id ansible@IP-Linux
+
+# Crear el inventario de Ansible
+
+sudo nano /etc/ansible/hosts
+
+[win]
+ansible2 ansible_host=<IP_Windows> ansible_user=ansible ansible_password=<CONTRASEÑA> ansible_connection=winrm ansible_winrm_transport=ssl ansible_port=5986 ansible_winrm_transport=basic ansible_winrm_server_cert_validation=ignore
+
+[linux]
+ansible1 ansible_host=<IP_Linux> ansible_user=ansible ansible_ssh_private_key_file=/home/ansible/.ssh/id_rsa
+
+# Probar la conexion
+
+ansible win -m win_ping
+ansible linux -m ping
+
+### Ad-Hoc
+
+Crear un archivo.txt en C:/Users/ansible/Desktop
+
+ansible ansible2 -m win_copy -a 'src=C:/Users/ansible/Desktop dest=C:/Users/ansible/Documents/archivo.txt remote_src=yes'
+
+ansible ansible1 -m reboot
+
+### Playbooks
+
+mkdir -p ~/ansible/playbooks
+cd ~/ansible/playbooks
+
+nano instalarnote.yaml
+
+---
+- name: Instalar Notepad++ en ansible2
+  hosts: ansible2
+  tasks:
+    - name: Instalar Notepad++
+      win_chocolatey:
+        name: notepadplusplus
+        state: present
+
+nano actualizar_repositorios.yaml
+
+---
+- name: Actualizar repositorios en ansible1
+  hosts: ansible1
+  tasks:
+    - name: Actualizar los repositorios
+      apt:
+        update_cache: yes
+
+sudo nano inventory
+
+ansible-playbook -i inventory instalar_notepad++.yaml
+ansible-playbook -i inventory actualizar_repositorios.yaml
+
+### Asterisk
+
+# Instalacion
+
+sudo dnf groupinstall "Development Tools" -y
+sudo subscription-manager repos --enable codeready-builder-for-rhel-9-x86_64-rpms
+sudo dnf -y install nano wget tar epel-release chkconfig libedit-devel
+
+sudo nano /etc/selinux/config 
+SELINUX=disabled
+reboot
+
+cd /usr/src
+sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-20-current.tar.gz
+sudo tar zxvf asterisk-20-current.tar.gz
+sudo rm -rf asterisk-20-current.tar.gz
+sudo cd asterisk-20*/
+
+sudo contrib/scripts/install_prereq install
+
+sudo ./configure --libdir=/usr/lib64 --with-pjproject-bundled --with-jansson-bundled
+
+sudo make 
+sudo make install
+sudo make samples
+mkdir /etc/asterisk/samples
+mv /etc/asterisk/*.* /etc/asterisk/samples/
+make basic-pbx
+
+sudo nano /usr/lib/systemd/system/asterisk.service
+
+[Unit]
+Description=Asterisk PBX and telephony daemon.
+#After=network.target
+#include these if asterisk need to bind to a specific IP (other than 0.0.0.0)
+Wants=network-online.target
+After=network-online.target network.target
+
+[Service]
+Type=simple
+Environment=HOME=/var/lib/asterisk
+WorkingDirectory=/var/lib/asterisk
+ExecStart=/usr/sbin/asterisk -mqf -C /etc/asterisk/asterisk.conf
+ExecReload=/usr/sbin/asterisk -rx 'core reload'
+ExecStop=/usr/sbin/asterisk -rx 'core stop now'
+
+LimitCORE=infinity
+Restart=always
+RestartSec=4
+
+# Prevent duplication of logs with color codes to /var/log/messages
+StandardOutput=null
+
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl enable asterisk.service
+sudo systemctl start asterisk
+sudo systemctl status asterisk
+
+### Issabel
+
+# Actualizar el sistema
+
+sudo dnf update -y
+
+# Descargar e Instalar Issabel
+
+wget http://repo.issabel.org/issabel5-netinstall.sh
+sudo bash issabel5-netinstall.sh
