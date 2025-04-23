@@ -1,0 +1,180 @@
+instalar nginx
+
+sudo yum install nginx
+verificar status de nginx
+
+    systemctl status nginx
+
+habilitar e iniciar en caso que este inactivo
+
+systemctl enable nginx
+
+systemctl start nginx
+cambiar puerto por defecto:
+ir a la siguiente ruta ingresando el siguiente comando:
+
+sudo nano /etc/nginx/nginx.conf
+busca el siguiente apartado en el archivo de configuracion y cambia el puerto por defecto al 8080
+
+        include /etc/nginx/conf.d/*.conf;
+
+        server { listen 8080; listen [::]:8080; server_name _; root /usr/share/nginx/html;
+
+Colocar mensaje HOLA MUNDO
+ingresa a la siguiente ruta:
+
+    /usr/share/nginx/html
+
+borrar el archivo de configuracion index.html(opcional)
+
+sudo rm index.html
+crear nuevo archivo index.html
+
+sudo nano index.html
+colocar el mensaje HOLA MUNDO con el siguiente ejemlo:
+
+"
+HOLA MUNDO
+"
+
+reiniciar el servicio nginx
+
+                systemctl restart nginx
+                verifica que todo este en orden entrando por el navegador
+
+Practica 2: Instalar un servidor de correos (2pts)
+
+Instala un servidor SMTP postfix Enviar un correo de ejemplo al correo del maestro "os3conadrian@gmail.com" con el asunto "MambruSeFueALaGuerra"(esta practica solo sera corregida si el correo es recibido en el buzon del maestro) y en el cuerpo su nombre y matricula
+instalacion de postfix
+
+#Actualizar el sistema:
+
+sudo yum update -y
+
+#Instalar Postfix:
+
+    sudo yum install -y postfix
+
+#Iniciar y habilitar el servicio Postfix:
+
+    sudo systemctl start postfix
+    sudo systemctl enable postfix
+
+Configurar el firewall para permitir el tráfico SMTP:
+
+sudo firewall-cmd --permanent --add-service=smtp sudo firewall-cmd --reload Editar el archivo de configuración principal de Postfix:
+
+bash
+
+    sudo nano /etc/postfix/main.cf
+
+instalar el siguiente paquete para enviar correos fuera del area local
+
+    sudo yum install -y cyrus-sasl cyrus-sasl-plain
+
+Editar el archivo de configuración principal de Postfix:
+
+    sudo nano /etc/postfix/main.cf
+
+Añade o modifica las siguientes líneas:
+plaintext
+
+    relayhost = [smtp.gmail.com]:587
+    smtp_sasl_auth_enable = yes
+    smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+    smtp_sasl_security_options =
+    smtp_tls_CAfile = /etc/ssl/certs/ca-bundle.crt
+    smtp_use_tls = yes
+
+Crear el archivo de autenticación:
+
+    sudo nano /etc/postfix/sasl_passwd
+
+Añade la siguiente línea, reemplazando your_email@gmail.com y your_password con tus credenciales de Gmail:
+plaintext
+
+    [smtp.gmail.com]:587 your_email@gmail.com:your_password
+
+Asegurar el archivo de autenticación:
+
+    sudo chmod 600 /etc/postfix/sasl_passwd
+
+Generar el archivo de mapa hash:
+
+    sudo postmap /etc/postfix/sasl_passwd
+
+Reiniciar el servicio Postfix:
+
+    sudo systemctl restart postfix
+
+enviar correo de prueba a la direccion que quieras
+
+    echo "Este es un correo de prueba" | mail -s "Prueba de Postfix" usuario@tudominio.com
+
+verifica que todo se halla hecho satisfactoriamente revisando los logs
+
+    sudo tail -f /var/log/maillog
+
+Practica 3: Instalar un servidor de Impresion (1pts)
+
+Instala un servidor de impresiones CUPS ("Common UNIX Printing System") Instala una IMpresora virtual (PDF) y configurala con CUPS En su PC cliente, instale la Impresora usando la IP del servidor Realize una prueba imprimiento un documento de WORD, el mismo debe de salir impreso (en PDF) en nuestra impresora virtual
+instalacion de cups e impresora pdf
+actualizar el sistema
+
+    sudo yum update
+
+instalar cups
+
+    sudo yum install cups -y
+
+#verificar el status de cups
+
+    systemctl status cups
+
+instalar la impresora PDF
+
+    sudo yum install cups-pdf
+
+$ ojo:
+si por alguna razon al intentar instalar el cups-pdf no te deja y aparece un mensaje que no se encuentra el repositorio lo siguiente es como arreglarlo
+
+El repositorio EPEL no está habilitado:
+cups-pdf suele estar disponible en el repositorio EPEL (Extra Packages for Enterprise Linux). Si no lo has habilitado, debes hacerlo.
+
+Solución:
+Instala el repositorio EPEL:
+
+    sudo dnf install epel-release
+
+Limpia la caché de DNF:
+
+    sudo dnf clean all
+
+Intenta instalar cups-pdf nuevamente:
+
+    sudo dnf install cups-pdf
+
+2. El repositorio EPEL no está actualizado:
+
+Aunque tengas EPEL habilitado, es posible que los metadatos del repositorio estén desactualizados. Solución:
+Actualiza los metadatos del repositorio:
+
+    sudo dnf makecache --refresh
+
+#Intenta instalar cups-pdf nuevamente:
+
+    sudo dnf install cups-pdf
+
+ahora continuando con el laboratorio:
+
+#habilitar el acceso remoto a la impresora
+
+    cupsctl --remote-admin --remote-any --share-printers
+
+habilitar el puerto 631 en el firewall
+
+    sudo firewall-cmd --permanent --add-port=631/tcp
+
+reiniciar firewall
+
+    sudo firewall-cmd --reload
